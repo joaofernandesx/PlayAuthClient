@@ -51,7 +51,7 @@ module PlayAuthClient
 			users = User.get_all_users_json
 			if users
 				users.each do |u|
-					if u[param].to_s.contains(val)
+					if u[param].include? val
 						return User.new(u['id'],u['first_name'],u['last_name'],u['email'])
 					end
 				end
