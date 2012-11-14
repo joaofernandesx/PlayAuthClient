@@ -20,23 +20,23 @@ module PlayAuthClient
 			"ID: "+@id.to_s+" # Name: "+@f_name+" "+@l_name+" # Email: "+@email
 		end
 
-
-		def self.get_all_users 
-			
+		#devolve todos os users em formato json
+		def self.get_all_users_json
 			user_path = APP_CONFIG['url_get_users']
 			json_users = JSON.parse(RestClient.get user_path) if user_path
+			return json_users
+		end
 
+		#devolve todos os users num array de 'User Object'
+		def self.get_all_users 
 			users = Array.new
-
-			json_users.each do |u|
-
+			User.get_all_users_json.each do |u|
 				users.push  User.new(u['id'],u['first_name'],u['last_name'],u['email'])
-
 			end
-
 			return users
 		end
 	
+		#devolve o user passado como parametro (id)
 		def self.get_user_by_id(user_id)
 			user_path = APP_CONFIG['url_get_users']
 			user_req = JSON.parse(RestClient.get user_path+user_id) if user_path
@@ -45,5 +45,19 @@ module PlayAuthClient
 			end
 			return nil
 		end
+
+		#devolve o user de acordo com o parametro especificado(parametro,valor)
+		def self.get_user_by_?(param,val)
+			users = User.get_all_users_json
+			if users
+				users.each do |u|
+					if u[param].to_s.contains(val)
+						return User.new(u['id'],u['first_name'],u['last_name'],u['email'])
+					end
+				end
+			end
+			return nil
+		end
+
 	end
 end
