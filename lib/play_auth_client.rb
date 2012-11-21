@@ -13,7 +13,7 @@ module PlayAuthClient
 			@id=id
 			@f_name=fname
 			@l_name=lname
-			@email=email
+			@email=email || "not defined"
 		end
 
 		def to_s
@@ -22,7 +22,8 @@ module PlayAuthClient
 
 		#return all users in json format
 		def self.get_all_users_json
-			user_path = APP_CONFIG['url_get_users']
+			vars = APP_CONFIG
+			user_path = vars['url_server']+vars['url_port']+vars['default_api'] + vars['url_get_users']
 			json_users = JSON.parse(RestClient.get user_path) if user_path
 			return json_users
 		end
@@ -38,7 +39,9 @@ module PlayAuthClient
 	
 		#return user from user_id input, if found
 		def self.get_user_by_id(user_id)
-			user_path = APP_CONFIG['url_get_users']
+			#user_path = APP_CONFIG['url_get_users']
+			vars = APP_CONFIG
+			user_path = vars['url_server']+vars['url_port']+vars['default_api'] + vars['url_get_users']
 			user_req = JSON.parse(RestClient.get user_path+user_id) if user_path
 			if user_req
 				return User.new(user_req['id'].to_s,user_req['first_name'],user_req['last_name'],user_req['email'])

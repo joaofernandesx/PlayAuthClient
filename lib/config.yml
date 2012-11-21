@@ -1,1 +1,11 @@
-url_get_users: http://localhost:3001/users/
+#path of server and port
+url_server: http://localhost/
+url_port: ':3001'
+
+#path for the current api
+default_api: /api/v1/
+
+#path for acess users
+url_get_users: users/
+
+
